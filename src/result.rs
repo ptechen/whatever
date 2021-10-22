@@ -10,6 +10,7 @@ use std::num::ParseIntError;
 use std::str::Utf8Error;
 use rbatis;
 use zip;
+use chrono;
 
 pub type AppResult<Result> = std::result::Result<Result, AppError>;
 
