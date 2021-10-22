@@ -55,17 +55,6 @@ pub enum AppErrorCode {
 }
 
 #[derive(Debug, Clone, Default)]
-pub struct StringError {
-    pub message: String,
-}
-
-impl fmt::Display for StringError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.message)
-    }
-}
-
-#[derive(Debug, Clone, Default)]
 pub struct CustomError {
     pub message: String,
 }
