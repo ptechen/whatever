@@ -18,14 +18,8 @@ use serde_json;
 #[cfg(feature = "sqlx_err")]
 use sqlx;
 use std;
-use std::fmt;
 use std::fmt::Display;
-#[cfg(feature = "std_err")]
 use std::fmt::Formatter;
-#[cfg(feature = "std_err")]
-use std::num::ParseIntError;
-#[cfg(feature = "std_err")]
-use std::str::Utf8Error;
 #[cfg(feature = "zip_err")]
 use zip;
 
@@ -107,7 +101,7 @@ impl<'a> From<CustomError> for &'a dyn std::error::Error {
 
 impl std::error::Error for CustomError {}
 
-impl fmt::Display for CustomError {
+impl std::fmt::Display for CustomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.message)
     }
@@ -189,7 +183,7 @@ impl Display for Error {
 }
 
 #[cfg(feature = "std_err")]
-impl From<ParseIntError> for Error {
+impl From<std::num::ParseIntError> for Error {
     fn from(s: std::num::ParseIntError) -> Self {
         Error::ParseIntError(s)
     }
@@ -203,7 +197,7 @@ impl From<std::io::Error> for Error {
 }
 
 #[cfg(feature = "std_err")]
-impl From<Utf8Error> for Error {
+impl From<std::str::Utf8Error> for Error {
     fn from(s: std::str::Utf8Error) -> Self {
         Error::Utf8Error(s)
     }
