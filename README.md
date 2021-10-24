@@ -1,2 +1,3 @@
 # whatever
-error
+Contains all error types.
+

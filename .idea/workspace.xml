@@ -84,11 +84,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="command" value="run --package whatever --bin whatever" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
@@ -119,7 +114,8 @@
       <option name="presentableId" value="Default" />
       <updated>1634918099058</updated>
       <workItem from="1634918101499" duration="350000" />
-      <workItem from="1634918460306" duration="4639000" />
+      <workItem from="1634918460306" duration="7846000" />
+      <workItem from="1635039461207" duration="1892000" />
     </task>
     <servers />
   </component>

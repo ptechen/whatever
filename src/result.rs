@@ -17,21 +17,27 @@ use serde::Serialize;
 use serde_json;
 #[cfg(feature = "sqlx_err")]
 use sqlx;
-use std::error::Error;
+use std;
 use std::fmt;
 use std::fmt::Display;
+#[cfg(feature = "std_err")]
 use std::fmt::Formatter;
+#[cfg(feature = "std_err")]
 use std::num::ParseIntError;
+#[cfg(feature = "std_err")]
 use std::str::Utf8Error;
 #[cfg(feature = "zip_err")]
 use zip;
 
-pub type AppResult<Result> = std::result::Result<Result, AppError>;
+pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug)]
-pub enum AppError {
+pub enum Error {
+    #[cfg(feature = "std_err")]
     ParseIntError(std::num::ParseIntError),
+    #[cfg(feature = "std_err")]
     Utf8Error(std::str::Utf8Error),
+    #[cfg(feature = "std_err")]
     IoError(std::io::Error),
     #[cfg(feature = "rbatis_err")]
     RbatisError(rbatis::Error),
@@ -47,7 +53,7 @@ pub enum AppError {
     CsvError(csv::Error),
     #[cfg(feature = "csv_err")]
     CsvIntoInnerError(csv::IntoInnerError<Writer<std::io::BufWriter<Vec<u8>>>>),
-    #[cfg(feature = "csv_err")]
+    #[cfg(feature = "std_err")]
     StdIntoInnerError(std::io::IntoInnerError<std::io::BufWriter<Vec<u8>>>),
     #[cfg(feature = "zip_err")]
     ZipError(zip::result::ZipError),
@@ -93,13 +99,13 @@ impl From<String> for CustomError {
     }
 }
 
-impl<'a> From<CustomError> for &'a dyn Error {
-    fn from(error: CustomError) -> &'a dyn Error {
+impl<'a> From<CustomError> for &'a dyn std::error::Error {
+    fn from(error: CustomError) -> &'a dyn std::error::Error {
         error.into()
     }
 }
 
-impl Error for CustomError {}
+impl std::error::Error for CustomError {}
 
 impl fmt::Display for CustomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -107,35 +113,38 @@ impl fmt::Display for CustomError {
     }
 }
 
-impl Error for AppError {
-    fn source(&self) -> Option<&(dyn Error + 'static)> {
+impl std::error::Error for Error {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match &self {
-            AppError::IoError(ref e) => Some(e),
-            AppError::Utf8Error(ref e) => Some(e),
-            AppError::ParseIntError(ref e) => Some(e),
+            #[cfg(feature = "std_err")]
+            Error::IoError(ref e) => Some(e),
+            #[cfg(feature = "std_err")]
+            Error::Utf8Error(ref e) => Some(e),
+            #[cfg(feature = "std_err")]
+            Error::ParseIntError(ref e) => Some(e),
             #[cfg(feature = "rbatis_err")]
-            AppError::RbatisError(ref e) => Some(e),
+            Error::RbatisError(ref e) => Some(e),
             #[cfg(feature = "actix_err")]
-            AppError::ActixError(ref e) => Some(e),
+            Error::ActixError(ref e) => Some(e),
             #[cfg(feature = "reqwest_err")]
-            AppError::ReqwestError(ref e) => Some(e),
+            Error::ReqwestError(ref e) => Some(e),
             #[cfg(feature = "serde_json_err")]
-            AppError::SerdeJsonError(ref e) => Some(e),
+            Error::SerdeJsonError(ref e) => Some(e),
             #[cfg(feature = "clickhouse_err")]
-            AppError::ClickHouseError(ref e) => Some(e),
+            Error::ClickHouseError(ref e) => Some(e),
             #[cfg(feature = "zip_err")]
-            AppError::ZipError(ref e) => Some(e),
+            Error::ZipError(ref e) => Some(e),
             #[cfg(feature = "csv_err")]
-            AppError::CsvError(ref e) => Some(e),
+            Error::CsvError(ref e) => Some(e),
             #[cfg(feature = "csv_err")]
-            AppError::CsvIntoInnerError(ref e) => Some(e),
-            #[cfg(feature = "csv_err")]
-            AppError::StdIntoInnerError(ref e) => Some(e),
+            Error::CsvIntoInnerError(ref e) => Some(e),
+            #[cfg(feature = "std_err")]
+            Error::StdIntoInnerError(ref e) => Some(e),
             #[cfg(feature = "chrono_err")]
-            AppError::ChronoParseError(ref e) => Some(e),
+            Error::ChronoParseError(ref e) => Some(e),
             #[cfg(feature = "sqlx_err")]
-            AppError::SqlxError(ref e) => Some(e),
-            AppError::CustomError(ref e) => {
+            Error::SqlxError(ref e) => Some(e),
+            Error::CustomError(ref e) => {
                 let s: CustomError = From::from(e.to_string());
                 Some(s.into())
             }
@@ -143,136 +152,142 @@ impl Error for AppError {
     }
 }
 
-impl Display for AppError {
+impl Display for Error {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match &self {
-            AppError::IoError(ref e) => e.fmt(f),
-            AppError::Utf8Error(ref e) => e.fmt(f),
-            AppError::ParseIntError(ref e) => e.fmt(f),
+            #[cfg(feature = "std_err")]
+            Error::IoError(ref e) => e.fmt(f),
+            #[cfg(feature = "std_err")]
+            Error::Utf8Error(ref e) => e.fmt(f),
+            #[cfg(feature = "std_err")]
+            Error::ParseIntError(ref e) => e.fmt(f),
             #[cfg(feature = "rbatis_err")]
-            AppError::RbatisError(ref e) => e.fmt(f),
+            Error::RbatisError(ref e) => e.fmt(f),
             #[cfg(feature = "actix_err")]
-            AppError::ActixError(ref e) => e.fmt(f),
+            Error::ActixError(ref e) => e.fmt(f),
             #[cfg(feature = "reqwest_err")]
-            AppError::ReqwestError(ref e) => e.fmt(f),
+            Error::ReqwestError(ref e) => e.fmt(f),
             #[cfg(feature = "serde_json_err")]
-            AppError::SerdeJsonError(ref e) => e.fmt(f),
+            Error::SerdeJsonError(ref e) => e.fmt(f),
             #[cfg(feature = "clickhouse_err")]
-            AppError::ClickHouseError(ref e) => e.fmt(f),
+            Error::ClickHouseError(ref e) => e.fmt(f),
             #[cfg(feature = "zip_err")]
-            AppError::ZipError(ref e) => e.fmt(f),
+            Error::ZipError(ref e) => e.fmt(f),
             #[cfg(feature = "csv_err")]
-            AppError::CsvError(ref e) => e.fmt(f),
+            Error::CsvError(ref e) => e.fmt(f),
             #[cfg(feature = "csv_err")]
-            AppError::CsvIntoInnerError(ref e) => e.fmt(f),
-            #[cfg(feature = "csv_err")]
-            AppError::StdIntoInnerError(ref e) => e.fmt(f),
+            Error::CsvIntoInnerError(ref e) => e.fmt(f),
+            #[cfg(feature = "std_err")]
+            Error::StdIntoInnerError(ref e) => e.fmt(f),
             #[cfg(feature = "chrono_err")]
-            AppError::ChronoParseError(ref e) => e.fmt(f),
+            Error::ChronoParseError(ref e) => e.fmt(f),
             #[cfg(feature = "sqlx_err")]
-            AppError::SqlxError(ref e) => e.fmt(f),
-            AppError::CustomError(ref e) => e.fmt(f),
+            Error::SqlxError(ref e) => e.fmt(f),
+            Error::CustomError(ref e) => e.fmt(f),
         }
     }
 }
 
-impl From<ParseIntError> for AppError {
+#[cfg(feature = "std_err")]
+impl From<ParseIntError> for Error {
     fn from(s: std::num::ParseIntError) -> Self {
-        AppError::ParseIntError(s)
+        Error::ParseIntError(s)
     }
 }
 
-impl From<std::io::Error> for AppError {
+#[cfg(feature = "std_err")]
+impl From<std::io::Error> for Error {
     fn from(s: std::io::Error) -> Self {
-        AppError::IoError(s)
+        Error::IoError(s)
     }
 }
 
-impl From<Utf8Error> for AppError {
+#[cfg(feature = "std_err")]
+impl From<Utf8Error> for Error {
     fn from(s: std::str::Utf8Error) -> Self {
-        AppError::Utf8Error(s)
+        Error::Utf8Error(s)
     }
 }
 
 #[cfg(feature = "rbatis_err")]
-impl From<rbatis::Error> for AppError {
+impl From<rbatis::Error> for Error {
     fn from(s: rbatis::Error) -> Self {
-        AppError::RbatisError(s)
+        Error::RbatisError(s)
     }
 }
 
 #[cfg(feature = "actix_err")]
-impl From<actix_web::error::Error> for AppError {
+impl From<actix_web::error::Error> for Error {
     fn from(s: actix_web::error::Error) -> Self {
-        AppError::ActixError(s)
+        Error::ActixError(s)
     }
 }
 
 #[cfg(feature = "reqwest_err")]
-impl From<reqwest::Error> for AppError {
+impl From<reqwest::Error> for Error {
     fn from(s: reqwest::Error) -> Self {
-        AppError::ReqwestError(s)
+        Error::ReqwestError(s)
     }
 }
 
 #[cfg(feature = "serde_json_err")]
-impl From<serde_json::Error> for AppError {
+impl From<serde_json::Error> for Error {
     fn from(s: serde_json::Error) -> Self {
-        AppError::SerdeJsonError(s)
+        Error::SerdeJsonError(s)
     }
 }
 
 #[cfg(feature = "clickhouse_err")]
-impl From<clickhouse::error::Error> for AppError {
+impl From<clickhouse::error::Error> for Error {
     fn from(s: clickhouse::error::Error) -> Self {
-        AppError::ClickHouseError(s)
+        Error::ClickHouseError(s)
     }
 }
 
 #[cfg(feature = "csv_err")]
-impl From<csv::Error> for AppError {
+impl From<csv::Error> for Error {
     fn from(s: csv::Error) -> Self {
-        AppError::CsvError(s)
+        Error::CsvError(s)
     }
 }
 
 #[cfg(feature = "csv_err")]
-impl From<csv::IntoInnerError<Writer<std::io::BufWriter<Vec<u8>>>>> for AppError {
+impl From<csv::IntoInnerError<Writer<std::io::BufWriter<Vec<u8>>>>> for Error {
     fn from(s: csv::IntoInnerError<Writer<std::io::BufWriter<Vec<u8>>>>) -> Self {
-        AppError::CsvIntoInnerError(s)
+        Error::CsvIntoInnerError(s)
     }
 }
 
-#[cfg(feature = "csv_err")]
-impl From<std::io::IntoInnerError<std::io::BufWriter<Vec<u8>>>> for AppError {
+#[cfg(feature = "std_err")]
+impl From<std::io::IntoInnerError<std::io::BufWriter<Vec<u8>>>> for Error {
     fn from(s: std::io::IntoInnerError<std::io::BufWriter<Vec<u8>>>) -> Self {
-        AppError::StdIntoInnerError(s)
+        Error::StdIntoInnerError(s)
     }
 }
 
 #[cfg(feature = "zip_err")]
-impl From<zip::result::ZipError> for AppError {
+impl From<zip::result::ZipError> for Error {
     fn from(s: zip::result::ZipError) -> Self {
-        AppError::ZipError(s)
+        Error::ZipError(s)
     }
 }
 
 #[cfg(feature = "chrono_err")]
-impl From<chrono::ParseError> for AppError {
+impl From<chrono::ParseError> for Error {
     fn from(s: chrono::ParseError) -> Self {
-        AppError::ChronoParseError(s)
+        Error::ChronoParseError(s)
     }
 }
 
-impl From<String> for AppError {
+impl From<String> for Error {
     fn from(s: String) -> Self {
-        AppError::CustomError(s)
+        Error::CustomError(s)
     }
 }
 
 #[cfg(feature = "sqlx_err")]
-impl From<sqlx::Error> for AppError {
+impl From<sqlx::Error> for Error {
     fn from(s: sqlx::Error) -> Self {
-        AppError::SqlxError(s)
+        Error::SqlxError(s)
     }
 }
