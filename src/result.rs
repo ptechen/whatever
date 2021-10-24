@@ -18,6 +18,7 @@ use serde_json;
 #[cfg(feature = "sqlx_err")]
 use sqlx;
 use std;
+use std::fmt;
 use std::fmt::Display;
 use std::fmt::Formatter;
 #[cfg(feature = "zip_err")]
