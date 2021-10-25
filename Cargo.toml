@@ -1,6 +1,6 @@
 [package]
 name = "whatever"
-version = "0.0.3"
+version = "0.0.4"
 authors = ["petechen <15736755067@163.com>"]
 edition = "2018"
 homepage = "https://github.com/ptechen"
@@ -23,7 +23,7 @@ reqwest = "^0.11.6"
 serde = "^1.0.130"
 serde_derive = "^1.0.130"
 serde_json = "^1.0.68"
-sqlx = "^0.5.9"
+sqlx = { version = "0.5", features = ["mysql", "time", "decimal", "json", "chrono", "macros","runtime-async-std-native-tls"] }
 zip = "^0.5.13"
 
 [features]
