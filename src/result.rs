@@ -24,6 +24,8 @@ use std::fmt::Formatter;
 #[cfg(feature = "zip_err")]
 use zip;
 
+use log::error;
+
 pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug)]
