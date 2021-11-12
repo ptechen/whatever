@@ -24,8 +24,6 @@ use std::fmt::Formatter;
 #[cfg(feature = "zip_err")]
 use zip;
 
-use log::error;
-
 pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug)]
@@ -287,17 +285,4 @@ impl From<sqlx::Error> for Error {
     fn from(s: sqlx::Error) -> Self {
         Error::SqlxError(s)
     }
-}
-
-#[macro_export]
-macro_rules! ok_or_return {
-    ($result:expr)=>{
-        match $result.await {
-            Ok(value)=> {Ok(value)},
-            Err(err)=>{
-                error!("error {:?} at file {} line {}", err, file!(),line!());
-                Err(err)
-            }
-        }
-    };
 }
