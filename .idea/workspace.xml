@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated />
+  </component>
   <component name="CMakeSettings">
     <configurations>
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" ENABLED="true" />
     </configurations>
+  </component>
+  <component name="CargoProjectFeatures">
+    <cargoProject file="$PROJECT_DIR$/Cargo.toml">
+      <package file="$PROJECT_DIR$">
+        <feature name="task_join_err" />
+        <feature name="chrono_err" />
+        <feature name="clickhouse_err" />
+        <feature name="axum_err" />
+        <feature name="std_err" />
+        <feature name="reqwest_err" />
+        <feature name="rbatis_err" />
+        <feature name="zip_err" />
+        <feature name="redis_err" />
+        <feature name="csv_err" />
+        <feature name="serde_json_err" />
+        <feature name="full" />
+      </package>
+    </cargoProject>
   </component>
   <component name="CargoProjects">
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
@@ -99,6 +120,11 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
@@ -121,6 +147,14 @@
       <workItem from="1641274466935" duration="1214000" />
       <workItem from="1641276117041" duration="1371000" />
       <workItem from="1641375985426" duration="1352000" />
+      <workItem from="1644837425451" duration="1368000" />
+      <workItem from="1650435873949" duration="798000" />
+      <workItem from="1650436773792" duration="190000" />
+      <workItem from="1650437006660" duration="34000" />
+      <workItem from="1650437044625" duration="407000" />
+      <workItem from="1650437455069" duration="47000" />
+      <workItem from="1650437505262" duration="1298000" />
+      <workItem from="1650438953002" duration="316000" />
     </task>
     <servers />
   </component>

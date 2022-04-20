@@ -12,14 +12,14 @@ description = "Contains all error types."
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = "0.4.5"
+axum = "0.5.3"
 chrono = "^0.4.19"
 clickhouse = "0.9.3"
 csv = "^1.1.6"
 enum-repr = "^0.2.6"
 libc = "^0.2.104"
-rbatis = "3.0.29"
-rbatis-core = "3.0.19"
+rbatis = {version  = "3.1.6"}
+rbatis-core = "3.1.6"
 r2d2_redis = "0.14.0"
 reqwest = "^0.11.8"
 serde = {version = "^1.0.133", features= ["derive"]}
@@ -32,7 +32,6 @@ tokio = { version = "1", features = ["full"] }
 [features]
 full = ["std_err", "rbatis_err", "reqwest_err", "serde_json_err", "chrono_err", "zip_err", "clickhouse_err", "csv_err", "axum_err", "redis_err", "task_join_err"]
 std_err = []
-sqlx_err = []
 rbatis_err = []
 reqwest_err = []
 serde_json_err = []
