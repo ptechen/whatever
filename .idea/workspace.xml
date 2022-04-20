@@ -30,7 +30,9 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c31d383-c0ff-46af-81ec-fec2075f88f0" name="Default Changelist" comment="" />
+    <list default="true" id="1c31d383-c0ff-46af-81ec-fec2075f88f0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -101,11 +103,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="command" value="run --package whatever --bin whatever" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
@@ -152,7 +149,8 @@
       <workItem from="1650437455069" duration="47000" />
       <workItem from="1650437505262" duration="1298000" />
       <workItem from="1650438953002" duration="1265000" />
-      <workItem from="1650440227884" duration="1400000" />
+      <workItem from="1650440227884" duration="1522000" />
+      <workItem from="1650444006958" duration="634000" />
     </task>
     <servers />
   </component>
