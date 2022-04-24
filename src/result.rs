@@ -8,8 +8,6 @@ use csv;
 use csv::Writer;
 use enum_repr::EnumRepr;
 use libc::*;
-// #[cfg(feature = "rbatis_err")]
-// use rbatis;
 #[cfg(feature = "reqwest_err")]
 use reqwest;
 use serde::Serialize;
@@ -34,8 +32,6 @@ pub enum Error {
     Utf8Error(std::str::Utf8Error),
     #[cfg(feature = "std_err")]
     IoError(std::io::Error),
-    // #[cfg(feature = "rbatis_err")]
-    // RbatisError(rbatis::Error),
     #[cfg(feature = "actix_err")]
     ActixError(actix_web::error::Error),
     #[cfg(feature = "reqwest_err")]
@@ -70,7 +66,6 @@ pub enum AppErrorCode {
     ParseIntErrorCode = 510,
     Utf8ErrorCode = 511,
     IoErrorCode = 512,
-    // RbatisErrorCode = 513,
     ActixErrorCode = 514,
     ReqwestErrorCode = 515,
     SerdeJsonErrorCode = 516,
@@ -117,8 +112,6 @@ impl std::error::Error for Error {
             Error::Utf8Error(ref e) => Some(e),
             #[cfg(feature = "std_err")]
             Error::ParseIntError(ref e) => Some(e),
-            // #[cfg(feature = "rbatis_err")]
-            // Error::RbatisError(ref e) => Some(e),
             #[cfg(feature = "actix_err")]
             Error::ActixError(ref e) => Some(e),
             #[cfg(feature = "reqwest_err")]
@@ -156,8 +149,6 @@ impl Display for Error {
             Error::Utf8Error(ref e) => e.fmt(f),
             #[cfg(feature = "std_err")]
             Error::ParseIntError(ref e) => e.fmt(f),
-            // #[cfg(feature = "rbatis_err")]
-            // Error::RbatisError(ref e) => e.fmt(f),
             #[cfg(feature = "actix_err")]
             Error::ActixError(ref e) => e.fmt(f),
             #[cfg(feature = "reqwest_err")]
@@ -203,13 +194,6 @@ impl From<std::str::Utf8Error> for Error {
         Error::Utf8Error(s)
     }
 }
-
-// #[cfg(feature = "rbatis_err")]
-// impl From<rbatis::Error> for Error {
-//     fn from(s: rbatis::Error) -> Self {
-//         Error::RbatisError(s)
-//     }
-// }
 
 #[cfg(feature = "actix_err")]
 impl From<actix_web::error::Error> for Error {
