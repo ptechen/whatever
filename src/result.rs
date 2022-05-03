@@ -39,6 +39,10 @@ pub enum AppError {
     #[error(transparent)]
     IoError(#[from] std::io::Error),
 
+    #[cfg(feature = "std_err")]
+    #[error(transparent)]
+    AddrParseError(std::net::AddrParseError),
+
     #[cfg(feature = "rbatis_err")]
     #[error(transparent)]
     RbatisError(#[from] rbatis::Error),
@@ -116,6 +120,7 @@ pub enum AppErrorCode {
     ChronoParseErrorCode = 521,
     RedisErrorCode = 522,
     TaskJoinErrorCode = 523,
+    AddrParseErrorCode = 524,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -152,6 +157,8 @@ impl Display for AppError {
             AppError::Utf8Error(ref e) => e.fmt(f),
             #[cfg(feature = "std_err")]
             AppError::ParseIntError(ref e) => e.fmt(f),
+            #[cfg(feature = "std_err")]
+            AppError::AddrParseError(ref e) => e.fmt(f),
             #[cfg(feature = "rbatis_err")]
             AppError::RbatisError(ref e) => e.fmt(f),
             #[cfg(feature = "reqwest_err")]
