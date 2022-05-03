@@ -41,7 +41,7 @@ pub enum AppError {
 
     #[cfg(feature = "std_err")]
     #[error(transparent)]
-    AddrParseError(std::net::AddrParseError),
+    AddrParseError(#[from] std::net::AddrParseError),
 
     #[cfg(feature = "rbatis_err")]
     #[error(transparent)]
