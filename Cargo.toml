@@ -16,8 +16,6 @@ axum = "^0.5"
 chrono = "^0.4"
 clickhouse = "^0.9"
 csv = "^1.1"
-enum-repr = "^0.2.6"
-libc = "^0.2"
 rbatis = {version  = "<3.1"}
 r2d2_redis = "^0.14"
 reqwest = "^0.11.8"

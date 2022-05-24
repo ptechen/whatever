@@ -4,8 +4,6 @@ use chrono;
 use csv;
 #[cfg(feature = "csv_err")]
 use csv::Writer;
-use enum_repr::EnumRepr;
-use libc::*;
 #[cfg(feature = "rbatis_err")]
 use rbatis;
 #[cfg(feature = "reqwest_err")]
@@ -98,7 +96,7 @@ pub enum AppError {
     CustomError(String),
 }
 
-#[EnumRepr(type = "c_int")]
+#[repr(i64)]
 #[derive(Serialize, Debug)]
 pub enum AppErrorCode {
     Zero = 0,

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated />
   </component>
@@ -8,25 +11,13 @@
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" ENABLED="true" />
     </configurations>
   </component>
-  <component name="CargoProjectFeatures">
-    <cargoProject file="$PROJECT_DIR$/Cargo.toml">
-      <package file="$PROJECT_DIR$">
-        <feature name="chrono_err" />
-        <feature name="clickhouse_err" />
-        <feature name="std_err" />
-        <feature name="reqwest_err" />
-        <feature name="zip_err" />
-        <feature name="csv_err" />
-        <feature name="serde_json_err" />
-        <feature name="full" />
-      </package>
-    </cargoProject>
-  </component>
   <component name="CargoProjects">
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c31d383-c0ff-46af-81ec-fec2075f88f0" name="Default Changelist" comment="" />
+    <list default="true" id="1c31d383-c0ff-46af-81ec-fec2075f88f0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,6 +35,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="GitToolBoxStore">
     <option name="recentBranches">
@@ -90,6 +89,7 @@
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
     <property name="org.rust.disableDetachedFileInspection/Users/taochen/CLionProjects/whatever/src/error.rs" value="true" />
     <property name="org.rust.disableDetachedFileInspection/Users/taochen/CLionProjects/whatever/src/lib.rs" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -145,6 +145,15 @@
       <workItem from="1650438953002" duration="1265000" />
       <workItem from="1650440227884" duration="1522000" />
       <workItem from="1650444006958" duration="1318000" />
+      <workItem from="1651592592674" duration="577000" />
+      <workItem from="1652076160754" duration="1113000" />
+      <workItem from="1653131073156" duration="793000" />
+      <workItem from="1653141549234" duration="985000" />
+      <workItem from="1653142539089" duration="25000" />
+      <workItem from="1653142567674" duration="69000" />
+      <workItem from="1653142640029" duration="99000" />
+      <workItem from="1653144994929" duration="1271000" />
+      <workItem from="1653383612741" duration="342000" />
     </task>
     <servers />
   </component>
@@ -162,5 +171,16 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/result.rs</url>
+          <line>26</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
