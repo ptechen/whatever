@@ -12,7 +12,7 @@ use serde::Serialize;
 #[cfg(feature = "serde_json_err")]
 use serde_json;
 use std;
-use std::fmt;
+// use std::fmt;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use thiserror::Error;
@@ -93,6 +93,10 @@ pub enum AppError {
     #[error(transparent)]
     TaskJoinError(#[from] tokio::task::JoinError),
 
+    #[cfg(feature = "anchor_client_err")]
+    #[error(transparent)]
+    AnchorClientError(#[from] anchor_client::ClientError),
+
     CustomError(String),
 }
 
@@ -119,6 +123,7 @@ pub enum AppErrorCode {
     RedisErrorCode = 522,
     TaskJoinErrorCode = 523,
     AddrParseErrorCode = 524,
+    AnchorClientErrorCode = 525,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -141,7 +146,7 @@ impl<'a> From<CustomError> for &'a dyn std::error::Error {
 impl std::error::Error for CustomError {}
 
 impl std::fmt::Display for CustomError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(f, "{}", self.message)
     }
 }
@@ -183,6 +188,8 @@ impl Display for AppError {
             AppError::RedisError(ref e) => e.fmt(f),
             #[cfg(feature = "task_join_err")]
             AppError::TaskJoinError(ref e) => e.fmt(f),
+            #[cfg(feature = "anchor_client_err")]
+            AppError::AnchorClientError(ref e) => e.fmt(f),
             AppError::CustomError(ref e) => e.fmt(f),
         }
     }
