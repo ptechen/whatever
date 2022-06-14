@@ -28,7 +28,8 @@ tokio = { version = "^1.0", features = ["full"] }
 anchor-client = "0.24.2"
 
 [features]
-full = ["std_err", "reqwest_err", "serde_json_err", "chrono_err", "csv_err", "axum_err", "redis_err", "task_join_err"]
+full = ["std_err", "rbatis_err", "reqwest_err", "serde_json_err", "chrono_err", "zip_err", "csv_err", "axum_err", "clickhouse_err", "redis_err", "task_join_err", "solana_client_err"]
+solana_err = ["std_err", "serde_json_err", "chrono_err", "axum_err", "redis_err", "solana_client_err"]
 std_err = []
 rbatis_err = []
 reqwest_err = []
