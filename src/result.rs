@@ -93,9 +93,13 @@ pub enum AppError {
     #[error(transparent)]
     TaskJoinError(#[from] tokio::task::JoinError),
 
-    #[cfg(feature = "anchor_client_err")]
+    #[cfg(feature = "solana_client_err")]
     #[error(transparent)]
     AnchorClientError(#[from] anchor_client::ClientError),
+
+    #[cfg(feature = "solana_client_err")]
+    #[error(transparent)]
+    SolanaClientError(#[from] anchor_client::solana_client::client_error::ClientError),
 
     CustomError(String),
 }
@@ -124,6 +128,7 @@ pub enum AppErrorCode {
     TaskJoinErrorCode = 523,
     AddrParseErrorCode = 524,
     AnchorClientErrorCode = 525,
+    SolanaClientErrorCode = 526
 }
 
 #[derive(Debug, Clone, Default)]
@@ -188,8 +193,10 @@ impl Display for AppError {
             AppError::RedisError(ref e) => e.fmt(f),
             #[cfg(feature = "task_join_err")]
             AppError::TaskJoinError(ref e) => e.fmt(f),
-            #[cfg(feature = "anchor_client_err")]
+            #[cfg(feature = "solana_client_err")]
             AppError::AnchorClientError(ref e) => e.fmt(f),
+            #[cfg(feature = "solana_client_err")]
+            AppError::SolanaClientError(ref e) => e.fmt(f),
             AppError::CustomError(ref e) => e.fmt(f),
         }
     }

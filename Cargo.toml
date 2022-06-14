@@ -1,6 +1,6 @@
 [package]
 name = "whatever"
-version = "0.2.34"
+version = "0.2.35"
 authors = ["petechen <15736755067@163.com>"]
 edition = "2018"
 homepage = "https://github.com/ptechen"
@@ -28,7 +28,7 @@ tokio = { version = "^1.0", features = ["full"] }
 anchor-client = "0.24.2"
 
 [features]
-full = ["std_err", "rbatis_err", "reqwest_err", "serde_json_err", "chrono_err", "zip_err", "clickhouse_err", "csv_err", "axum_err", "redis_err", "task_join_err"]
+full = ["std_err", "reqwest_err", "serde_json_err", "chrono_err", "csv_err", "axum_err", "redis_err", "task_join_err"]
 std_err = []
 rbatis_err = []
 reqwest_err = []
@@ -40,4 +40,4 @@ csv_err = []
 axum_err = []
 redis_err = []
 task_join_err = []
-anchor_client_err = []
+solana_client_err = []
