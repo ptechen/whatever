@@ -1,6 +1,6 @@
 [package]
 name = "whatever"
-version = "0.2.41"
+version = "0.2.42"
 authors = ["petechen <15736755067@163.com>"]
 edition = "2018"
 homepage = "https://github.com/ptechen"
@@ -19,7 +19,6 @@ thiserror = "1"
 zip = "0.5"
 tokio = { version = "1", features = ["full"] }
 sqlx = { version =  "0.6", features = ["runtime-tokio-native-tls"] }
-anchor-client = "0.25.0"
 rbatis = "3"
 validator = { version = "0.15", features = ["derive"] }
 csv = "1"
