@@ -16,9 +16,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1c31d383-c0ff-46af-81ec-fec2075f88f0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/whatever.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -76,6 +73,7 @@
     <option name="directoryName" value="xsvqvcwm" />
   </component>
   <component name="ProjectId" id="1zrtaVrzK3rApeaf0JFgOyCANP4" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -185,6 +183,7 @@
       <workItem from="1655195776894" duration="2735000" />
       <workItem from="1658493536651" duration="7471000" />
       <workItem from="1658501675780" duration="1743000" />
+      <workItem from="1658504024876" duration="689000" />
     </task>
     <servers />
   </component>

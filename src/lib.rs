@@ -8,3 +8,6 @@ pub mod csv_err;
 
 #[cfg(feature = "axum_err")]
 pub mod axum_err;
+
+#[cfg(feature = "solana_err")]
+pub mod solana_err;

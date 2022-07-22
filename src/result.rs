@@ -22,6 +22,9 @@ use crate::csv_err;
 #[cfg(feature = "axum_err")]
 use crate::axum_err;
 
+#[cfg(feature = "solana_err")]
+use crate::solana_err;
+
 pub type AppResult<T> = std::result::Result<T, AppError>;
 
 #[derive(Debug, thiserror::Error)]
@@ -42,9 +45,9 @@ pub enum AppError {
     #[error(transparent)]
     SqlxError(#[from] sqlx::error::Error),
 
-    #[cfg(feature = "solana_sdk_err")]
+    #[cfg(feature = "solana_err")]
     #[error(transparent)]
-    ProgramError(#[from] solana_sdk::program_error::ProgramError),
+    SolanaError(#[from] solana_err::SolanaError),
 
     #[cfg(feature = "anchor_client_err")]
     #[error(transparent)]
@@ -140,10 +143,8 @@ impl Display for AppError {
             AppError::AxumError(ref e) => e.fmt(f),
             #[cfg(feature = "sqlx_err")]
             AppError::SqlxError(ref e) => e.fmt(f),
-            #[cfg(feature = "solana_sdk_err")]
+            #[cfg(feature = "solana_err")]
             AppError::ProgramError(ref e) => e.fmt(f),
-            #[cfg(feature = "anchor_client_err")]
-            AppError::AnchorClientError(ref e) => e.fmt(f),
             #[cfg(feature = "rbatis_err")]
             AppError::RbatisError(ref e) => e.fmt(f),
             #[cfg(feature = "reqwest_err")]
