@@ -15,7 +15,15 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c31d383-c0ff-46af-81ec-fec2075f88f0" name="Default Changelist" comment="" />
+    <list default="true" id="1c31d383-c0ff-46af-81ec-fec2075f88f0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/axum_err.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/csv_err.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/std_err.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/result.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/result.rs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -97,6 +105,11 @@
     </key>
   </component>
   <component name="RunManager" selected="Cargo.Test test">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="command" value="run --package whatever --bin whatever" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
@@ -177,7 +190,8 @@
       <workItem from="1653383612741" duration="342000" />
       <workItem from="1653407544535" duration="985000" />
       <workItem from="1654177889129" duration="2905000" />
-      <workItem from="1655195776894" duration="770000" />
+      <workItem from="1655195776894" duration="2735000" />
+      <workItem from="1658493536651" duration="7019000" />
     </task>
     <servers />
   </component>
@@ -201,7 +215,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/result.rs</url>
-          <line>24</line>
+          <line>25</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

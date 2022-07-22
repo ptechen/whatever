@@ -1,6 +1,6 @@
 [package]
 name = "whatever"
-version = "0.2.35"
+version = "0.2.4"
 authors = ["petechen <15736755067@163.com>"]
 edition = "2018"
 homepage = "https://github.com/ptechen"
@@ -12,33 +12,37 @@ description = "Contains all error types."
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = "^0.5"
-chrono = "^0.4"
-clickhouse = "^0.9"
-csv = "^1.1"
-rbatis = {version  = "<3.1"}
-r2d2_redis = "^0.14"
-reqwest = "^0.11.8"
-serde = {version = "^1.0", features= ["derive"]}
-serde_json = "^1.0.74"
-thiserror = "^1.0"
-validator = { version = "^0.14", features = ["derive"] }
-zip = "^0.5"
-tokio = { version = "^1.0", features = ["full"] }
-anchor-client = "0.24.2"
+r2d2_redis = "0.14"
+serde = {version = "1", features= ["derive"]}
+serde_json = "1"
+thiserror = "1"
+zip = "0.5"
+tokio = { version = "1", features = ["full"] }
+sqlx = { version =  "0.6", features = ["runtime-tokio-native-tls"] }
+anchor-client = "0.25.0"
+rbatis = "3"
+validator = { version = "0.15", features = ["derive"] }
+csv = "1"
+clickhouse = "0.10"
+reqwest = "0.11"
+chrono = "0.4"
+axum = "0.5"
+
+[dependencies.solana-sdk]
+version = "1"
 
 [features]
-full = ["std_err", "rbatis_err", "reqwest_err", "serde_json_err", "chrono_err", "zip_err", "csv_err", "axum_err", "clickhouse_err", "redis_err", "task_join_err", "solana_client_err"]
-solana_err = ["std_err", "serde_json_err", "chrono_err", "axum_err", "redis_err", "solana_client_err"]
+default = ["std_err", "csv_err", "axum_err", "reqwest_err", "serde_json_err", "chrono_err", "redis_err", "task_join_err"]
 std_err = []
+csv_err = []
+axum_err = []
+sqlx_err = []
 rbatis_err = []
 reqwest_err = []
 serde_json_err = []
 chrono_err = []
-zip_err = []
 clickhouse_err = []
-csv_err = []
-axum_err = []
 redis_err = []
 task_join_err = []
-solana_client_err = []
+solana_sdk_err = []
+anchor_client_err = []
