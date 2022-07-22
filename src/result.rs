@@ -98,13 +98,12 @@ pub enum AppErrorCode {
     SqlxErrorCode = 504,
     RbatisErrorCode = 505,
     SolanaSdkErrorCode = 506,
-    AnchorClientErrorCode = 507,
-    ReqwestErrorCode = 508,
-    SerdeJsonErrorCode = 509,
-    ClickHouseErrorCode = 510,
-    ChronoParseErrorCode = 511,
-    RedisErrorCode = 512,
-    TaskJoinErrorCode = 513,
+    ReqwestErrorCode = 507,
+    SerdeJsonErrorCode = 508,
+    ClickHouseErrorCode = 509,
+    ChronoParseErrorCode = 510,
+    RedisErrorCode = 511,
+    TaskJoinErrorCode = 512,
 }
 
 #[derive(Debug, Clone, Default)]
