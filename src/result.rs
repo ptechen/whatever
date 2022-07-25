@@ -1,5 +1,9 @@
 #[cfg(feature = "chrono_err")]
 use chrono;
+#[cfg(feature = "csv_err")]
+use csv;
+#[cfg(feature = "csv_err")]
+use csv::Writer;
 #[cfg(feature = "rbatis_err")]
 use rbatis;
 #[cfg(feature = "reqwest_err")]
@@ -8,50 +12,38 @@ use serde::Serialize;
 #[cfg(feature = "serde_json_err")]
 use serde_json;
 use std;
+// use std::fmt;
 use std::fmt::Display;
 use std::fmt::Formatter;
+use thiserror::Error;
 #[cfg(feature = "task_join_err")]
 use tokio;
-
-#[cfg(feature = "std_err")]
-use crate::std_err;
-
-#[cfg(feature = "csv_err")]
-use crate::csv_err;
-
-#[cfg(feature = "axum_err")]
-use crate::axum_err;
-
-#[cfg(feature = "solana_err")]
-use crate::solana_err;
+#[cfg(feature = "zip_err")]
+use zip;
 
 pub type AppResult<T> = std::result::Result<T, AppError>;
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, Error)]
 pub enum AppError {
     #[cfg(feature = "std_err")]
     #[error(transparent)]
-    StdError(#[from] std_err::StdError),
+    ParseIntError(#[from] std::num::ParseIntError),
 
-    #[cfg(feature = "csv_err")]
+    #[cfg(feature = "std_err")]
     #[error(transparent)]
-    CsvError(#[from] csv_err::CsvError),
+    Utf8Error(#[from] std::str::Utf8Error),
 
-    #[cfg(feature = "axum_err")]
+    #[cfg(feature = "std_err")]
     #[error(transparent)]
-    AxumError(#[from] axum_err::AxumError),
+    IoError(#[from] std::io::Error),
 
-    #[cfg(feature = "sqlx_err")]
+    #[cfg(feature = "std_err")]
     #[error(transparent)]
-    SqlxError(#[from] sqlx::error::Error),
+    AddrParseError(#[from] std::net::AddrParseError),
 
-    #[cfg(feature = "solana_err")]
+    #[cfg(feature = "std_err")]
     #[error(transparent)]
-    SolanaError(#[from] solana_err::SolanaError),
-
-    #[cfg(feature = "anchor_client_err")]
-    #[error(transparent)]
-    AnchorClientError(#[from] anchor_client::ClientError),
+    StdIntoInnerError(#[from] std::io::IntoInnerError<std::io::BufWriter<Vec<u8>>>),
 
     #[cfg(feature = "rbatis_err")]
     #[error(transparent)]
@@ -69,9 +61,29 @@ pub enum AppError {
     #[error(transparent)]
     ClickHouseError(#[from] clickhouse::error::Error),
 
+    #[cfg(feature = "csv_err")]
+    #[error(transparent)]
+    CsvError(#[from] csv::Error),
+
+    #[cfg(feature = "csv_err")]
+    #[error(transparent)]
+    CsvIntoInnerError(#[from] csv::IntoInnerError<Writer<std::io::BufWriter<Vec<u8>>>>),
+
+    #[cfg(feature = "zip_err")]
+    #[error(transparent)]
+    ZipError(#[from] zip::result::ZipError),
+
     #[cfg(feature = "chrono_err")]
     #[error(transparent)]
     ChronoParseError(#[from] chrono::ParseError),
+
+    #[cfg(feature = "axum_err")]
+    #[error(transparent)]
+    ValidationError(#[from] validator::ValidationErrors),
+
+    #[cfg(feature = "axum_err")]
+    #[error(transparent)]
+    AxumJsonRejection(#[from] axum::extract::rejection::JsonRejection),
 
     #[cfg(feature = "redis_err")]
     #[error(transparent)]
@@ -80,6 +92,14 @@ pub enum AppError {
     #[cfg(feature = "task_join_err")]
     #[error(transparent)]
     TaskJoinError(#[from] tokio::task::JoinError),
+
+    #[cfg(feature = "solana_err")]
+    #[error(transparent)]
+    SolanaClientError(#[from] solana_client::client_error::ClientError),
+
+    #[cfg(feature = "solana_err")]
+    #[error(transparent)]
+    SolanaProgramError(#[from] solana_sdk::program_error::ProgramError),
 
     CustomError(String),
 }
@@ -92,18 +112,23 @@ pub enum AppErrorCode {
     NotFound = 404,
     CustomError = 405,
     SystemErrorCode = 500,
-    StdErrorCode = 501,
-    AxumErrorCode = 502,
-    CsvErrorCode = 503,
-    SqlxErrorCode = 504,
-    RbatisErrorCode = 505,
-    SolanaSdkErrorCode = 506,
-    ReqwestErrorCode = 507,
-    SerdeJsonErrorCode = 508,
-    ClickHouseErrorCode = 509,
-    ChronoParseErrorCode = 510,
-    RedisErrorCode = 511,
-    TaskJoinErrorCode = 512,
+    ParseIntErrorCode = 510,
+    Utf8ErrorCode = 511,
+    IoErrorCode = 512,
+    RbatisErrorCode = 513,
+    ReqwestErrorCode = 514,
+    SerdeJsonErrorCode = 515,
+    ClickHouseErrorCode = 516,
+    CsvErrorCode = 517,
+    CsvIntoInnerErrorCode = 518,
+    StdIntoInnerErrorCode = 519,
+    ZipErrorCode = 520,
+    ChronoParseErrorCode = 521,
+    RedisErrorCode = 522,
+    TaskJoinErrorCode = 523,
+    AddrParseErrorCode = 524,
+    SolanaClientErrorCode = 525,
+    SolanaProgramErrorCode = 526,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -135,15 +160,15 @@ impl Display for AppError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match &self {
             #[cfg(feature = "std_err")]
-            AppError::StdError(ref e) => e.fmt(f),
-            #[cfg(feature = "csv_err")]
-            AppError::CsvError(ref e) => e.fmt(f),
-            #[cfg(feature = "axum_err")]
-            AppError::AxumError(ref e) => e.fmt(f),
-            #[cfg(feature = "sqlx_err")]
-            AppError::SqlxError(ref e) => e.fmt(f),
-            #[cfg(feature = "solana_err")]
-            AppError::ProgramError(ref e) => e.fmt(f),
+            AppError::IoError(ref e) => e.fmt(f),
+            #[cfg(feature = "std_err")]
+            AppError::Utf8Error(ref e) => e.fmt(f),
+            #[cfg(feature = "std_err")]
+            AppError::ParseIntError(ref e) => e.fmt(f),
+            #[cfg(feature = "std_err")]
+            AppError::AddrParseError(ref e) => e.fmt(f),
+            #[cfg(feature = "std_err")]
+            AppError::StdIntoInnerError(ref e) => e.fmt(f),
             #[cfg(feature = "rbatis_err")]
             AppError::RbatisError(ref e) => e.fmt(f),
             #[cfg(feature = "reqwest_err")]
@@ -152,12 +177,28 @@ impl Display for AppError {
             AppError::SerdeJsonError(ref e) => e.fmt(f),
             #[cfg(feature = "clickhouse_err")]
             AppError::ClickHouseError(ref e) => e.fmt(f),
+            #[cfg(feature = "zip_err")]
+            AppError::ZipError(ref e) => e.fmt(f),
+            #[cfg(feature = "csv_err")]
+            AppError::CsvError(ref e) => e.fmt(f),
+            #[cfg(feature = "csv_err")]
+            AppError::CsvIntoInnerError(ref e) => e.fmt(f),
             #[cfg(feature = "chrono_err")]
             AppError::ChronoParseError(ref e) => e.fmt(f),
+            #[cfg(feature = "axum_err")]
+            AppError::ValidationError(ref e) => e.fmt(f),
+            #[cfg(feature = "axum_err")]
+            AppError::AxumJsonRejection(ref e) => e.fmt(f),
             #[cfg(feature = "redis_err")]
             AppError::RedisError(ref e) => e.fmt(f),
             #[cfg(feature = "task_join_err")]
             AppError::TaskJoinError(ref e) => e.fmt(f),
+
+            #[cfg(feature = "solana_err")]
+            AppError::SolanaClientError(ref e) => e.fmt(f),
+            #[cfg(feature = "solana_err")]
+            AppError::SolanaProgramError(ref e) => e.fmt(f),
+
             AppError::CustomError(ref e) => e.fmt(f),
         }
     }
