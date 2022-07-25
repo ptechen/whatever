@@ -121,22 +121,24 @@ pub enum AppErrorCode {
     CustomError = 405,
     SystemErrorCode = 500,
     ParseIntErrorCode = 510,
-    Utf8ErrorCode = 511,
-    IoErrorCode = 512,
-    RbatisErrorCode = 513,
-    ReqwestErrorCode = 514,
-    SerdeJsonErrorCode = 515,
-    ClickHouseErrorCode = 516,
-    CsvErrorCode = 517,
-    CsvIntoInnerErrorCode = 518,
-    StdIntoInnerErrorCode = 519,
-    ZipErrorCode = 520,
-    ChronoParseErrorCode = 521,
-    RedisErrorCode = 522,
-    TaskJoinErrorCode = 523,
-    AddrParseErrorCode = 524,
-    SolanaClientErrorCode = 525,
-    SolanaProgramErrorCode = 526,
+    ParseFloatErrorCode = 511,
+    Utf8ErrorCode = 512,
+    IoErrorCode = 513,
+    RbatisErrorCode = 514,
+    ReqwestErrorCode = 515,
+    SerdeJsonErrorCode = 516,
+    ClickHouseErrorCode = 517,
+    CsvErrorCode = 518,
+    CsvIntoInnerErrorCode = 519,
+    StdIntoInnerErrorCode = 520,
+    ZipErrorCode = 521,
+    ChronoParseErrorCode = 522,
+    RedisErrorCode = 523,
+    TaskJoinErrorCode = 524,
+    AddrParseErrorCode = 525,
+    SolanaClientErrorCode = 526,
+    SolanaProgramErrorCode = 527,
+    SqlxErrorCode = 528,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -213,5 +215,64 @@ impl Display for AppError {
 
             AppError::CustomError(ref e) => e.fmt(f),
         }
+    }
+}
+
+pub fn match_app_error(e: AppError) -> (AppErrorCode, String) {
+    match e {
+        #[cfg(feature = "std_err")]
+        AppError::ParseIntError(e) => (AppErrorCode::ParseIntErrorCode, e.to_string()),
+        #[cfg(feature = "std_err")]
+        AppError::Utf8Error(e) => (AppErrorCode::Utf8ErrorCode, e.to_string()),
+        #[cfg(feature = "std_err")]
+        AppError::IoError(e) => (AppErrorCode::IoErrorCode, e.to_string()),
+        #[cfg(feature = "std_err")]
+        AppError::StdIntoInnerError(e) => (AppErrorCode::StdIntoInnerErrorCode, e.to_string()),
+        #[cfg(feature = "std_err")]
+        AppError::AddrParseError(e) => (AppErrorCode::AddrParseErrorCode, e.to_string()),
+        #[cfg(feature = "std_err")]
+        AppError::ParseFloatError(e) => (AppErrorCode::ParseFloatErrorCode, e.to_string()),
+
+        #[cfg(feature = "serde_json_err")]
+        AppError::SerdeJsonError(e) => (AppErrorCode::SerdeJsonErrorCode, e.to_string()),
+
+        #[cfg(feature = "axum_err")]
+        AppError::ReqwestError(e) => (AppErrorCode::ReqwestErrorCode, e.to_string()),
+        #[cfg(feature = "axum_err")]
+        AppError::ValidationError(e) => (AppErrorCode::RequestErrorCode, e.to_string()),
+        #[cfg(feature = "axum_err")]
+        AppError::AxumJsonRejection(e) => {
+            (AppErrorCode::RequestErrorCode, e.to_string())
+        }
+
+        #[cfg(feature = "chrono_err")]
+        AppError::ChronoParseError(e) => {
+            (AppErrorCode::ChronoParseErrorCode, e.to_string())
+        }
+
+        #[cfg(feature = "redis_err")]
+        AppError::RedisError(e) => (AppErrorCode::RedisErrorCode, e.to_string()),
+
+        #[cfg(feature = "solana_err")]
+        AppError::SolanaClientError(e) => {
+            (AppErrorCode::SolanaClientErrorCode, e.to_string())
+        }
+        #[cfg(feature = "solana_err")]
+        AppError::SolanaProgramError(e) => (AppErrorCode::SolanaProgramErrorCode, e.to_string()),
+        #[cfg(feature = "sqlx_err")]
+        AppError::SqlxError(e) => (AppErrorCode::SqlxErrorCode, e.to_string()),
+        #[cfg(feature = "csv_err")]
+        AppError::CsvError(e) => (AppErrorCode::CsvErrorCode, e.to_string()),
+        #[cfg(feature = "csv_err")]
+        AppError::CsvIntoInnerError(_) => (AppErrorCode::CsvIntoInnerErrorCode, e.to_string()),
+        #[cfg(feature = "zip_err")]
+        AppError::ZipError(e) => (AppErrorCode::ZipErrorCode, e.to_string()),
+        #[cfg(feature = "task_join_err")]
+        AppError::TaskJoinError(e) => (AppErrorCode::TaskJoinErrorCode, e.to_string()),
+        #[cfg(feature = "rbatis_err")]
+        AppError::RbatisError(e) => (AppErrorCode::RbatisErrorCode, e.to_string()),
+        #[cfg(feature = "clickhouse_err")]
+        AppError::ClickHouseError(e) => (AppErrorCode::ClickHouseErrorCode, e.to_string()),
+        AppError::CustomError(e) => (AppErrorCode::CustomError, e),
     }
 }
