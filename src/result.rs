@@ -27,6 +27,10 @@ pub type AppResult<T> = std::result::Result<T, AppError>;
 pub enum AppError {
     #[cfg(feature = "std_err")]
     #[error(transparent)]
+    BoxError(#[from] Box<dyn std::error::Error>),
+
+    #[cfg(feature = "std_err")]
+    #[error(transparent)]
     ParseIntError(#[from] std::num::ParseIntError),
 
     #[cfg(feature = "std_err")]
@@ -105,6 +109,18 @@ pub enum AppError {
     #[error(transparent)]
     SolanaProgramError(#[from] solana_sdk::program_error::ProgramError),
 
+    #[cfg(feature = "solana_err")]
+    #[error(transparent)]
+    ParsePubkeyError(#[from] solana_sdk::pubkey::ParsePubkeyError),
+
+    #[cfg(feature = "solana_err")]
+    #[error(transparent)]
+    RsaError(#[from] rsa::errors::Error),
+
+    #[cfg(feature = "ed25519_dalek_err")]
+    #[error(transparent)]
+    SignatureError(#[from] ed25519_dalek::SignatureError),
+
     #[cfg(feature = "sqlx_err")]
     #[error(transparent)]
     SqlxError(#[from] sqlx::Error),
@@ -118,7 +134,7 @@ pub enum AppErrorCode {
     Zero = 0,
     RequestErrorCode = 402,
     NotFound = 404,
-    CustomError = 405,
+    CustomErrorCode = 405,
     SystemErrorCode = 500,
     ParseIntErrorCode = 510,
     ParseFloatErrorCode = 511,
@@ -138,7 +154,11 @@ pub enum AppErrorCode {
     AddrParseErrorCode = 525,
     SolanaClientErrorCode = 526,
     SolanaProgramErrorCode = 527,
-    SqlxErrorCode = 528,
+    ParsePubkeyErrorCode = 528,
+    SqlxErrorCode = 529,
+    RsaErrorCode = 530,
+    BoxErrorCode = 531,
+    SignatureErrorCode= 532,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -169,6 +189,8 @@ impl std::fmt::Display for CustomError {
 impl Display for AppError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match &self {
+            #[cfg(feature = "std_err")]
+            AppError::BoxError(e) => e.fmt(f),
             #[cfg(feature = "std_err")]
             AppError::IoError(ref e) => e.fmt(f),
             #[cfg(feature = "std_err")]
@@ -210,8 +232,15 @@ impl Display for AppError {
             AppError::SolanaClientError(ref e) => e.fmt(f),
             #[cfg(feature = "solana_err")]
             AppError::SolanaProgramError(ref e) => e.fmt(f),
+            #[cfg(feature = "solana_err")]
+            AppError::ParsePubkeyError(ref e) => e.fmt(f),
+
             #[cfg(feature = "sqlx_err")]
             AppError::SqlxError(ref e) => e.fmt(f),
+            #[cfg(feature = "rsa_err")]
+            AppError::RsaError(e) => e.fmt(f),
+            #[cfg(feature = "ed25519_dalek_err")]
+            AppError::SignatureError(ref e) => e.fmt(f),
 
             AppError::CustomError(ref e) => e.fmt(f),
         }
@@ -220,6 +249,8 @@ impl Display for AppError {
 
 pub fn match_app_error(e: AppError) -> (AppErrorCode, String) {
     match e {
+        #[cfg(feature = "std_err")]
+        AppError::BoxError(e) => (AppErrorCode::BoxErrorCode, e.to_string()),
         #[cfg(feature = "std_err")]
         AppError::ParseIntError(e) => (AppErrorCode::ParseIntErrorCode, e.to_string()),
         #[cfg(feature = "std_err")]
@@ -232,39 +263,35 @@ pub fn match_app_error(e: AppError) -> (AppErrorCode, String) {
         AppError::AddrParseError(e) => (AppErrorCode::AddrParseErrorCode, e.to_string()),
         #[cfg(feature = "std_err")]
         AppError::ParseFloatError(e) => (AppErrorCode::ParseFloatErrorCode, e.to_string()),
-
         #[cfg(feature = "serde_json_err")]
         AppError::SerdeJsonError(e) => (AppErrorCode::SerdeJsonErrorCode, e.to_string()),
-
         #[cfg(feature = "axum_err")]
         AppError::ReqwestError(e) => (AppErrorCode::ReqwestErrorCode, e.to_string()),
         #[cfg(feature = "axum_err")]
         AppError::ValidationError(e) => (AppErrorCode::RequestErrorCode, e.to_string()),
         #[cfg(feature = "axum_err")]
-        AppError::AxumJsonRejection(e) => {
-            (AppErrorCode::RequestErrorCode, e.to_string())
-        }
+        AppError::AxumJsonRejection(e) => (AppErrorCode::RequestErrorCode, e.to_string()),
 
         #[cfg(feature = "chrono_err")]
-        AppError::ChronoParseError(e) => {
-            (AppErrorCode::ChronoParseErrorCode, e.to_string())
-        }
+        AppError::ChronoParseError(e) => (AppErrorCode::ChronoParseErrorCode, e.to_string()),
 
         #[cfg(feature = "redis_err")]
         AppError::RedisError(e) => (AppErrorCode::RedisErrorCode, e.to_string()),
 
         #[cfg(feature = "solana_err")]
-        AppError::SolanaClientError(e) => {
-            (AppErrorCode::SolanaClientErrorCode, e.to_string())
-        }
+        AppError::SolanaClientError(e) => (AppErrorCode::SolanaClientErrorCode, e.to_string()),
         #[cfg(feature = "solana_err")]
         AppError::SolanaProgramError(e) => (AppErrorCode::SolanaProgramErrorCode, e.to_string()),
+        #[cfg(feature = "solana_err")]
+        AppError::ParsePubkeyError(e) => (AppErrorCode::ParsePubkeyErrorCode, e.to_string()),
+        #[cfg(feature = "rsa_err")]
+        AppError::RsaError(e) => (AppErrorCode::RsaErrorCode, e.to_string()),
         #[cfg(feature = "sqlx_err")]
         AppError::SqlxError(e) => (AppErrorCode::SqlxErrorCode, e.to_string()),
         #[cfg(feature = "csv_err")]
         AppError::CsvError(e) => (AppErrorCode::CsvErrorCode, e.to_string()),
         #[cfg(feature = "csv_err")]
-        AppError::CsvIntoInnerError(_) => (AppErrorCode::CsvIntoInnerErrorCode, e.to_string()),
+        AppError::CsvIntoInnerError(e) => (AppErrorCode::CsvIntoInnerErrorCode, e.to_string()),
         #[cfg(feature = "zip_err")]
         AppError::ZipError(e) => (AppErrorCode::ZipErrorCode, e.to_string()),
         #[cfg(feature = "task_join_err")]
@@ -273,6 +300,8 @@ pub fn match_app_error(e: AppError) -> (AppErrorCode, String) {
         AppError::RbatisError(e) => (AppErrorCode::RbatisErrorCode, e.to_string()),
         #[cfg(feature = "clickhouse_err")]
         AppError::ClickHouseError(e) => (AppErrorCode::ClickHouseErrorCode, e.to_string()),
-        AppError::CustomError(e) => (AppErrorCode::CustomError, e),
+        #[cfg(feature = "ed25519_dalek_err")]
+        AppError::SignatureError(e) => (AppErrorCode::SignatureErrorCode, e.to_string()),
+        AppError::CustomError(e) => (AppErrorCode::CustomErrorCode, e),
     }
 }

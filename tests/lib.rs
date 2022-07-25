@@ -1,5 +1,5 @@
-use whatever::result::AppResult;
 use whatever::result::AppError::CustomError;
+use whatever::result::AppResult;
 
 #[test]
 fn test() {
@@ -7,7 +7,7 @@ fn test() {
     println!("{:?}", v);
 }
 
-fn test1() -> AppResult<()>{
+fn test1() -> AppResult<()> {
     let v = test_custom_error()?;
     println!("{:?}", v);
     Ok(())
