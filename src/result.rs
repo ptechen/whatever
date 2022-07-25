@@ -208,8 +208,11 @@ impl Display for AppError {
             AppError::SolanaClientError(ref e) => e.fmt(f),
             #[cfg(feature = "solana_err")]
             AppError::SolanaProgramError(ref e) => e.fmt(f),
+            #[cfg(feature = "sqlx_err")]
+            AppError::SqlxError(ref e) => e.fmt(f),
 
             AppError::CustomError(ref e) => e.fmt(f),
+            AppError::SqlxError(ref e) => e.fmt(f),
         }
     }
 }
