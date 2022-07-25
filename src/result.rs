@@ -31,6 +31,10 @@ pub enum AppError {
 
     #[cfg(feature = "std_err")]
     #[error(transparent)]
+    ParseFloatError(#[from] std::num::ParseFloatError),
+
+    #[cfg(feature = "std_err")]
+    #[error(transparent)]
     Utf8Error(#[from] std::str::Utf8Error),
 
     #[cfg(feature = "std_err")]
@@ -165,6 +169,8 @@ impl Display for AppError {
             AppError::Utf8Error(ref e) => e.fmt(f),
             #[cfg(feature = "std_err")]
             AppError::ParseIntError(ref e) => e.fmt(f),
+            #[cfg(feature = "std_err")]
+            AppError::ParseFloatError(ref e) => e.fmt(f),
             #[cfg(feature = "std_err")]
             AppError::AddrParseError(ref e) => e.fmt(f),
             #[cfg(feature = "std_err")]
