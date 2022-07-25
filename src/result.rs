@@ -212,7 +212,6 @@ impl Display for AppError {
             AppError::SqlxError(ref e) => e.fmt(f),
 
             AppError::CustomError(ref e) => e.fmt(f),
-            AppError::SqlxError(ref e) => e.fmt(f),
         }
     }
 }
