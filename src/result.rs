@@ -105,6 +105,10 @@ pub enum AppError {
     #[error(transparent)]
     SolanaProgramError(#[from] solana_sdk::program_error::ProgramError),
 
+    #[cfg(feature = "sqlx_err")]
+    #[error(transparent)]
+    SqlxError(#[from] sqlx::Error),
+
     CustomError(String),
 }
 
